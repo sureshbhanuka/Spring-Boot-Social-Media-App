@@ -1,27 +1,232 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Home</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+    />
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9fafb;
+            color: #212529;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: #ffffff !important;
+            box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+            font-weight: 600;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            color: #2c3e50 !important;
+            letter-spacing: 1px;
+        }
+
+        #loginSuccessMsg {
+            max-width: 400px;
+            margin: 0 auto 1rem auto;
+            font-weight: 600;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #d4edda;
+        }
+
+        h3 {
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #34495e;
+        }
+
+        /* Post Form */
+        form.mb-4 {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
+        }
+
+        textarea.form-control {
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.1);
+            transition: border-color 0.3s ease;
+        }
+
+        textarea.form-control:focus {
+            border-color: #4f46e5; /* Indigo */
+            box-shadow: 0 0 8px rgb(79 70 229 / 0.4);
+        }
+
+        button.btn-primary {
+            background: #4f46e5;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        button.btn-primary:hover {
+            background: #4338ca;
+        }
+
+        /* Post Cards */
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgb(0 0 0 / 0.08);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 12px 32px rgb(0 0 0 / 0.12);
+        }
+
+        .card-title {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .card-text {
+            font-size: 1rem;
+            color: #4b5563;
+        }
+
+        .text-muted {
+            font-size: 0.85rem;
+        }
+
+        /* Like/Unlike Buttons */
+        form[style*="display:inline;"] > button {
+            border-radius: 24px;
+            padding: 0.25rem 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary {
+            color: #4f46e5;
+            border-color: #4f46e5;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #4f46e5;
+            color: #fff;
+            border-color: #4f46e5;
+        }
+
+        .btn-outline-danger {
+            color: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #ef4444;
+            color: #fff;
+            border-color: #ef4444;
+        }
+
+        /* Edit/Delete Buttons */
+        .mt-2 a.btn-warning,
+        .mt-2 button.btn-danger {
+            border-radius: 24px;
+            padding: 0.3rem 1rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .mt-2 a.btn-warning {
+            background-color: #fbbf24;
+            border-color: #fbbf24;
+            color: #1e293b;
+        }
+
+        .mt-2 a.btn-warning:hover {
+            background-color: #f59e0b;
+            border-color: #f59e0b;
+            color: #1e293b;
+        }
+
+        .mt-2 button.btn-danger {
+            background-color: #ef4444;
+            border-color: #ef4444;
+            color: #fff;
+        }
+
+        .mt-2 button.btn-danger:hover {
+            background-color: #dc2626;
+            border-color: #dc2626;
+            color: #fff;
+        }
+
+        /* Logout Button */
+        form.ms-auto > button {
+            border-radius: 24px;
+            padding: 0.3rem 1.1rem;
+            font-weight: 600;
+            color: #ef4444;
+            border: 2px solid #ef4444;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        form.ms-auto > button:hover {
+            background-color: #ef4444;
+            color: #fff;
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 576px) {
+            .card {
+                border-radius: 12px;
+            }
+            form.mb-4 {
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
-<body class="bg-light">
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
+<body>
+<nav class="navbar navbar-expand-lg navbar-light shadow-sm mb-4">
     <div class="container">
         <a class="navbar-brand" href="#">SocialApp</a>
+        <div
+                id="loginSuccessMsg"
+                th:if="${param.loginSuccess}"
+                class="alert alert-success text-center"
+        >
+            ✅ Login successful! Welcome back.
+        </div>
         <form th:action="@{/logout}" method="post" class="ms-auto">
-            <button class="btn btn-outline-danger" type="submit">Logout</button>
+            <button class="btn btn-outline-danger" type="submit">
+                Logout
+            </button>
         </form>
     </div>
 </nav>
 
 <div class="container">
-    <h3>Welcome, <span th:text="${username}">User</span></h3>
+    <h3>
+        Welcome, <span th:text="${username}">User</span>
+    </h3>
 
     <!-- Create Post -->
     <form th:action="@{/posts/create}" method="post" class="mb-4">
         <div class="mb-3">
-            <textarea class="form-control" name="content" rows="3" placeholder="What's on your mind?" required></textarea>
+                <textarea
+                        class="form-control"
+                        name="content"
+                        rows="3"
+                        placeholder="What's on your mind?"
+                        required
+                ></textarea>
         </div>
         <button class="btn btn-primary">Post</button>
     </form>
@@ -31,13 +236,30 @@
         <div class="card-body">
             <h5 class="card-title" th:text="${post.user.firstName} + ' ' + ${post.user.lastName}">User</h5>
             <p class="card-text" th:text="${post.content}">Post content</p>
-            <p class="card-text"><small class="text-muted" th:text="${#temporals.format(post.timestamp, 'dd MMM yyyy HH:mm')}">Time</small></p>
+            <p class="card-text">
+                <small
+                        class="text-muted"
+                        th:text="${#temporals.format(post.timestamp, 'dd MMM yyyy HH:mm')}"
+                >
+                    Time
+                </small>
+            </p>
 
             <!-- Like/Unlike Button -->
-            <form th:if="${post.likedByCurrentUser}" th:action="@{'/posts/unlike/' + ${post.id}}" method="post" style="display:inline;">
+            <form
+                    th:if="${post.likedByCurrentUser}"
+                    th:action="@{'/posts/unlike/' + ${post.id}}"
+                    method="post"
+                    style="display:inline;"
+            >
                 <button class="btn btn-outline-danger btn-sm">Unlike</button>
             </form>
-            <form th:unless="${post.likedByCurrentUser}" th:action="@{'/posts/like/' + ${post.id}}" method="post" style="display:inline;">
+            <form
+                    th:unless="${post.likedByCurrentUser}"
+                    th:action="@{'/posts/like/' + ${post.id}}"
+                    method="post"
+                    style="display:inline;"
+            >
                 <button class="btn btn-outline-primary btn-sm">Like</button>
             </form>
 
@@ -45,13 +267,32 @@
 
             <!-- Edit/Delete Options -->
             <div class="mt-2">
-                <a th:href="@{'/posts/edit/' + ${post.id}}" class="btn btn-sm btn-warning">Edit</a>
-                <form th:action="@{'/posts/delete/' + ${post.id}}" method="post" style="display:inline;">
+                <a
+                        th:href="@{'/posts/edit/' + ${post.id}}"
+                        class="btn btn-sm btn-warning"
+                >Edit</a
+                >
+                <form
+                        th:action="@{'/posts/delete/' + ${post.id}}"
+                        method="post"
+                        style="display:inline;"
+                >
                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const loginMsg = document.getElementById("loginSuccessMsg");
+            if (loginMsg) {
+                setTimeout(() => {
+                    loginMsg.style.display = "none";
+                }, 3000); // 3 seconds
+            }
+        });
+    </script>
 </body>
 </html>

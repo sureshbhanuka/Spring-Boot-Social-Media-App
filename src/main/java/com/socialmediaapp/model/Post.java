@@ -1,12 +1,16 @@
 package com.socialmediaapp.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "posts")
 public class Post {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +27,7 @@ public class Post {
 
     // Getters and setters
 
-    public Long getId() {
+    /*public Long getId() {
         return id;
     }
 
@@ -54,4 +58,6 @@ public class Post {
     public void setUser(User user) {
         this.user = user;
     }
+
+     */
 }

@@ -1,10 +1,14 @@
 package com.socialmediaapp.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "likes", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "post_id"}))
 public class Like {
 
@@ -19,13 +23,15 @@ public class Like {
 
     // Constructors, getters, setters
 
-    public Like() {}
+    /*public Like() {}
 
 
     public Like(User user, Post post) {
         this.user = user;
         this.post = post;
     }
+
+     */
 
     public Long getId() {
         return id;

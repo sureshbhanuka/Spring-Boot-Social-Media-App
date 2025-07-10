@@ -1,33 +1,118 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .card {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .input-group-text {
+            cursor: pointer;
+        }
+    </style>
 </head>
-<body class="bg-light">
-<div class="container mt-5">
-    <h2>Register</h2>
-    <form th:action="@{/register}" th:object="${user}" method="post">
+<body>
+<div class="card">
+    <h3 class="text-center mb-4">📝 Register</h3>
+
+    <!-- Password mismatch error -->
+    <div id="passwordError" class="alert alert-danger d-none" role="alert">
+        Password and Confirm Password do not match.
+    </div>
+
+    <form th:action="@{/register}" th:object="${user}" method="post" onsubmit="return validatePasswords();">
         <div class="mb-3">
             <label>Email</label>
             <input type="email" th:field="*{email}" class="form-control" required>
         </div>
+
         <div class="mb-3">
             <label>Password</label>
-            <input type="password" th:field="*{password}" class="form-control" required>
+            <div class="input-group">
+                <input type="password" th:field="*{password}" class="form-control" id="password" required>
+                <span class="input-group-text" onclick="toggleVisibility('password', 'toggleIcon1')">
+                    <i class="bi bi-eye" id="toggleIcon1"></i>
+                </span>
+            </div>
         </div>
+
+        <div class="mb-3">
+            <label>Confirm Password</label>
+            <div class="input-group">
+                <input type="password" class="form-control" id="confirmPassword" required>
+                <span class="input-group-text" onclick="toggleVisibility('confirmPassword', 'toggleIcon2')">
+                    <i class="bi bi-eye" id="toggleIcon2"></i>
+                </span>
+            </div>
+        </div>
+
         <div class="mb-3">
             <label>First Name</label>
             <input type="text" th:field="*{firstName}" class="form-control" required>
         </div>
+
         <div class="mb-3">
             <label>Last Name</label>
             <input type="text" th:field="*{lastName}" class="form-control" required>
         </div>
-        <button type="submit" class="btn btn-success">Register</button>
+
+        <button type="submit" class="btn btn-success w-100 mt-2">Register</button>
     </form>
-    <p class="mt-3">Already registered? <a th:href="@{/login}">Login here</a></p>
+
+    <p class="mt-3 text-center">Already registered? <a th:href="@{/login}">Login here</a></p>
 </div>
+
+<!-- JS: Password validation + toggle -->
+<script>
+    function validatePasswords() {
+        const password = document.getElementById("password").value;
+        const confirm = document.getElementById("confirmPassword").value;
+        const error = document.getElementById("passwordError");
+
+        if (password !== confirm) {
+            error.classList.remove("d-none");
+            return false;
+        }
+        error.classList.add("d-none");
+        return true;
+    }
+
+    function toggleVisibility(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+        }
+    }
+</script>
 </body>
 </html>
