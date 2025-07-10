@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="#">SocialApp</a>
+        <form th:action="@{/logout}" method="post" class="ms-auto">
+            <button class="btn btn-outline-danger" type="submit">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container">
+    <h3>Welcome, <span th:text="${username}">User</span></h3>
+
+    <!-- Create Post -->
+    <form th:action="@{/posts/create}" method="post" class="mb-4">
+        <div class="mb-3">
+            <textarea class="form-control" name="content" rows="3" placeholder="What's on your mind?" required></textarea>
+        </div>
+        <button class="btn btn-primary">Post</button>
+    </form>
+
+    <!-- Post Feed -->
+    <div th:each="post : ${posts}" class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${post.user.firstName} + ' ' + ${post.user.lastName}">User</h5>
+            <p class="card-text" th:text="${post.content}">Post content</p>
+            <p class="card-text"><small class="text-muted" th:text="${#temporals.format(post.timestamp, 'dd MMM yyyy HH:mm')}">Time</small></p>
+
+            <!-- Like/Unlike Button -->
+            <form th:if="${post.likedByCurrentUser}" th:action="@{'/posts/unlike/' + ${post.id}}" method="post" style="display:inline;">
+                <button class="btn btn-outline-danger btn-sm">Unlike</button>
+            </form>
+            <form th:unless="${post.likedByCurrentUser}" th:action="@{'/posts/like/' + ${post.id}}" method="post" style="display:inline;">
+                <button class="btn btn-outline-primary btn-sm">Like</button>
+            </form>
+
+            <span class="ms-2 text-muted" th:text="${post.likeCount} + ' likes'">0 likes</span>
+
+            <!-- Edit/Delete Options -->
+            <div class="mt-2">
+                <a th:href="@{'/posts/edit/' + ${post.id}}" class="btn btn-sm btn-warning">Edit</a>
+                <form th:action="@{'/posts/delete/' + ${post.id}}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

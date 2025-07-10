@@ -1,13 +1,12 @@
 package com.socialmediaapp.model;
 
 import jakarta.persistence.*;
-import jdk.jfr.DataAmount;
 import lombok.Data;
 
 @Entity
 @Data
-
-public class Friendship {
+@Table(name = "likes", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "post_id"}))
+public class Like {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,14 +15,17 @@ public class Friendship {
     private User user;
 
     @ManyToOne
-    private User friend;
+    private Post post;
 
-    public Friendship(User user, User friend) {
+    // Constructors, getters, setters
+
+    public Like() {}
+
+
+    public Like(User user, Post post) {
         this.user = user;
-        this.friend = friend;
+        this.post = post;
     }
-
-    // Getters and setters
 
     public Long getId() {
         return id;
@@ -41,11 +43,11 @@ public class Friendship {
         this.user = user;
     }
 
-    public User getFriend() {
-        return friend;
+    public Post getPost() {
+        return post;
     }
 
-    public void setFriend(User friend) {
-        this.friend = friend;
+    public void setPost(Post post) {
+        this.post = post;
     }
 }
